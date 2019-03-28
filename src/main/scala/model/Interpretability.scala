@@ -15,7 +15,7 @@ object Interpretability {
     * @param x: xgboost margin score
     * @return probability
     */
-  def score_to_proba(x: Float): Float = {
+  def scoreToProba(x: Float): Float = {
     (1 / (1 + exp(-x))).toFloat
   }
 
@@ -27,6 +27,8 @@ object Interpretability {
     * @return Interpretability
     */
   def apply(shapValues: List[Float]): Interpretability = {
-    Interpretability(score_to_proba(shapValues.sum), (List("sepalLength", "sepalWidth", "petalLength", "petalWidth") zip shapValues).toMap)
+    Interpretability(scoreToProba(shapValues.sum), (List("sepalLength", "sepalWidth", "petalLength", "petalWidth") zip shapValues).toMap)
   }
+
+  val empty = Interpretability(-1, Map.empty[String, Float])
 }
