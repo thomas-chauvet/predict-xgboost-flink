@@ -1,0 +1,59 @@
+version: '2.4'
+
+networks:
+  default:
+
+services:
+
+  jobmanager:
+    build:
+      context: .
+      dockerfile: DockerfileFlinkCustom
+    expose:
+      - "6123"
+    ports:
+      - "8081"
+      - "6123"
+      - "6124"
+      - "6125"
+    networks:
+      default:
+    command: jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+    cpus: "1"
+    mem_limit: 1536M
+    restart: "on-failure"
+
+  taskmanager:
+    build:
+      context: .
+      dockerfile: DockerfileFlinkCustom
+    expose:
+      - "6121"
+      - "6122"
+    networks:
+      default:
+    command: taskmanager
+    links:
+      - "jobmanager:jobmanager"
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+      - TASK_MANAGER_NUMBER_OF_TASK_SLOTS=1
+    depends_on:
+      - jobmanager
+    cpus: "1"
+    mem_limit: 1536M
+    restart: "on-failure"  
+
+  xgboost:
+    build:
+      context: .
+      dockerfile: DockerfilePredictJob
+    depends_on:
+      - jobmanager
+      - taskmanager
+    environment:
+      - FLINK_JOB_MANAGER_HOST=jobmanager
+      - FLINK_JOB_MANAGER_PORT=8081
+    restart: "on-failure"

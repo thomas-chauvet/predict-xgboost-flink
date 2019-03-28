@@ -1,0 +1,4 @@
+FROM flink:1.7.2-hadoop28-scala_2.11
+
+RUN apt-get update
+RUN apt-get install -y libgomp1
