@@ -17,7 +17,8 @@ val flinkDependencies = Seq(
 )
 
 libraryDependencies += "ml.dmlc" % "xgboost4j" % "0.82"
-libraryDependencies += "org.apache.kafka" %% "kafka" % "2.2.0"
+libraryDependencies += "org.apache.kafka" %% "kafka" % "1.1.1"
+libraryDependencies += "org.apache.flink" %% "flink-connector-kafka" % "0.10.0"
 
 val testDependencies = Seq(
   "net.manub" %% "scalatest-embedded-kafka" % "2.0.0" % "test",
